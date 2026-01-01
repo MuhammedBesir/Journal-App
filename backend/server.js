@@ -90,7 +90,12 @@ app.get("/api/db-check", async (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
+  // Return actual error for debugging
+  res.status(500).json({ 
+    error: err.message,
+    details: err.stack,
+    path: req.path
+  });
 });
 
 // Initialize database and start server
