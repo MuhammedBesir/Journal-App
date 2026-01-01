@@ -1,0 +1,364 @@
+/* Light Theme - Warm Colors */
+:root {
+  /* Light theme warm colors */
+  --light-bg: #fef6e4;
+  --light-surface: #fff9e6;
+  --light-card: #fffbf0;
+  --light-border: #e8d5a8;
+  --light-text: #2d2d2d;
+  --light-text-secondary: #5a5a5a;
+  --light-primary: #d4691f;
+  --light-primary-hover: #b85816;
+  --light-accent: #f7931e;
+  --light-success: #8cb369;
+  --light-warning: #f4a261;
+  --light-error: #e76f51;
+
+  /* Dark theme colors (existing) */
+  --dark-bg: #111418;
+  --dark-surface: #1c2127;
+  --dark-card: #283039;
+  --dark-border: #3b4754;
+  --dark-text: #ffffff;
+  --dark-text-secondary: #9dabb9;
+  --dark-primary: #137fec;
+  --dark-primary-hover: #0f6acc;
+}
+
+/* Notification animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+body:not(.dark) .bg-\[\#111418\] {
+  background-color: var(--light-bg) !important;
+}
+
+body:not(.dark) .bg-\[\#1c2127\] {
+  background-color: var(--light-card) !important;
+}
+
+body:not(.dark) .bg-\[\#283039\] {
+  background-color: var(--light-surface) !important;
+}
+
+body:not(.dark) .border-\[\#283039\],
+body:not(.dark) .border-\[\#3b4754\] {
+  border-color: var(--light-border) !important;
+}
+
+body:not(.dark) .text-white {
+  color: var(--light-text) !important;
+}
+
+body:not(.dark) .text-\[\#9dabb9\] {
+  color: var(--light-text-secondary) !important;
+}
+
+body:not(.dark) .bg-\[\#137fec\],
+body:not(.dark) .text-\[\#137fec\] {
+  background-color: var(--light-primary) !important;
+  color: white !important;
+}
+
+body:not(.dark) .hover\:bg-\[\#137fec\]:hover,
+body:not(.dark) .hover\:bg-\[\#0f6acc\]:hover {
+  background-color: var(--light-primary-hover) !important;
+}
+
+body:not(.dark) .text-\[\#137fec\] {
+  color: var(--light-primary) !important;
+}
+
+body:not(.dark) .border-\[\#137fec\] {
+  border-color: var(--light-primary) !important;
+}
+
+/* React Calendar light theme */
+body:not(.dark) .react-calendar {
+  background-color: var(--light-card) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text) !important;
+}
+
+body:not(.dark) .react-calendar__tile {
+  color: var(--light-text) !important;
+}
+
+body:not(.dark) .react-calendar__tile:enabled:hover,
+body:not(.dark) .react-calendar__tile:enabled:focus {
+  background-color: var(--light-surface) !important;
+}
+
+body:not(.dark) .react-calendar__tile--active,
+body:not(.dark) .react-calendar__tile--now {
+  background-color: var(--light-primary) !important;
+  color: white !important;
+}
+
+body:not(.dark) .react-calendar__navigation button {
+  color: var(--light-text) !important;
+}
+
+body:not(.dark) .react-calendar__month-view__weekdays {
+  color: var(--light-text-secondary) !important;
+}
+
+body:not(.dark) .has-entry {
+  background-color: var(--light-accent) !important;
+  color: white !important;
+}
+
+/* Sidebar light theme */
+body:not(.dark) .sidebar {
+  background-color: var(--light-card) !important;
+  border-right-color: var(--light-border) !important;
+}
+
+/* Input fields light theme */
+body:not(.dark) input,
+body:not(.dark) textarea,
+body:not(.dark) select {
+  background-color: var(--light-surface) !important;
+  color: var(--light-text) !important;
+  border-color: var(--light-border) !important;
+}
+
+body:not(.dark) input::placeholder,
+body:not(.dark) textarea::placeholder {
+  color: var(--light-text-secondary) !important;
+  opacity: 0.6;
+}
+
+body:not(.dark) input:focus,
+body:not(.dark) textarea:focus,
+body:not(.dark) select:focus {
+  border-color: var(--light-primary) !important;
+  outline-color: var(--light-primary) !important;
+}
+
+/* Buttons light theme */
+body:not(.dark) button {
+  color: var(--light-text);
+}
+
+body:not(.dark) .hover\:bg-\[\#283039\]:hover {
+  background-color: var(--light-surface) !important;
+}
+
+body:not(.dark) .hover\:bg-\[\#2f3841\]:hover {
+  background-color: rgba(212, 105, 31, 0.15) !important;
+}
+
+/* Toggle switch light theme */
+body:not(.dark) .peer-checked\:bg-\[\#137fec\] {
+  background-color: var(--light-primary) !important;
+}
+
+body:not(.dark) .bg-\[\#283039\]:not(.peer-checked\:bg-\[\#137fec\]) {
+  background-color: #d4d4d4 !important;
+}
+
+/* Cards and containers */
+body:not(.dark) .rounded-xl,
+body:not(.dark) .rounded-2xl,
+body:not(.dark) .rounded-lg {
+  background-color: var(--light-card);
+}
+
+/* Improve readability for light theme */
+body:not(.dark) .text-sm,
+body:not(.dark) .text-base {
+  color: var(--light-text);
+}
+
+body:not(.dark) .text-xs {
+  color: var(--light-text-secondary);
+}
+
+/* Better contrast for icons */
+body:not(.dark) .material-symbols-outlined {
+  color: var(--light-text);
+  opacity: 0.8;
+}
+
+body:not(.dark) .text-\[\#9dabb9\] .material-symbols-outlined {
+  color: var(--light-text-secondary);
+}
+
+/* Hover states for light theme */
+body:not(.dark) button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+body:not(.dark) .hover\:text-white:hover {
+  color: var(--light-text) !important;
+}
+
+body:not(.dark) .hover\:text-\[\#137fec\]:hover {
+  color: var(--light-primary) !important;
+}
+
+/* Shadows for light theme */
+body:not(.dark) .shadow-sm {
+  box-shadow: 0 1px 3px 0 rgba(213, 105, 31, 0.1),
+    0 1px 2px -1px rgba(213, 105, 31, 0.1);
+}
+
+body:not(.dark) .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(213, 105, 31, 0.15),
+    0 2px 4px -2px rgba(213, 105, 31, 0.15);
+}
+
+body:not(.dark) .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(213, 105, 31, 0.2),
+    0 4px 6px -4px rgba(213, 105, 31, 0.2);
+}
+
+/* Mood colors for light theme */
+body:not(.dark) .bg-green-500\/20 {
+  background-color: rgba(140, 179, 105, 0.3) !important;
+}
+
+body:not(.dark) .text-green-400 {
+  color: #8cb369 !important;
+}
+
+body:not(.dark) .bg-orange-500\/20 {
+  background-color: rgba(244, 162, 97, 0.3) !important;
+}
+
+body:not(.dark) .text-orange-400 {
+  color: #f4a261 !important;
+}
+
+body:not(.dark) .bg-blue-500\/20 {
+  background-color: rgba(42, 157, 143, 0.3) !important;
+}
+
+body:not(.dark) .text-blue-400 {
+  color: #2a9d8f !important;
+}
+
+body:not(.dark) .bg-red-500\/20 {
+  background-color: rgba(231, 111, 81, 0.3) !important;
+}
+
+body:not(.dark) .text-red-400 {
+  color: #e76f51 !important;
+}
+
+body:not(.dark) .bg-purple-500\/20 {
+  background-color: rgba(168, 116, 161, 0.3) !important;
+}
+
+body:not(.dark) .text-purple-400 {
+  color: #a874a1 !important;
+}
+
+body:not(.dark) .bg-yellow-500\/20 {
+  background-color: rgba(247, 147, 30, 0.3) !important;
+}
+
+body:not(.dark) .text-yellow-400 {
+  color: #f7931e !important;
+}
+
+/* Better spacing and borders for light theme */
+body:not(.dark) .border-dashed {
+  border-color: var(--light-border);
+  opacity: 0.6;
+}
+
+/* Gradient backgrounds for light theme */
+body:not(.dark) .bg-gradient-to-br {
+  background: linear-gradient(
+    to bottom right,
+    var(--light-primary),
+    var(--light-primary-hover)
+  ) !important;
+}
+
+/* Red button for light theme */
+body:not(.dark) .bg-red-600 {
+  background-color: var(--light-error) !important;
+}
+
+body:not(.dark) .hover\:bg-red-700:hover {
+  background-color: #d35a3e !important;
+}
+
+body:not(.dark) .border-red-900\/30 {
+  border-color: rgba(231, 111, 81, 0.3) !important;
+}
+
+/* Text color adjustments */
+body:not(.dark) .placeholder-gray-500::placeholder {
+  color: var(--light-text-secondary) !important;
+  opacity: 0.5;
+}
+
+body:not(.dark) .placeholder-\[\#5e6b79\]::placeholder,
+body:not(.dark) .placeholder-\[\#4e5d6d\]::placeholder {
+  color: var(--light-text-secondary) !important;
+  opacity: 0.5;
+}
+
+/* Active states */
+body:not(.dark) .peer-checked\:after\:bg-white::after {
+  background-color: white !important;
+}
+
+/* Disabled states */
+body:not(.dark) button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus states for better accessibility */
+body:not(.dark) *:focus {
+  outline-color: var(--light-primary) !important;
+}
+
+body:not(.dark) .focus\:ring-\[\#137fec\]:focus {
+  --tw-ring-color: var(--light-primary) !important;
+}
+
+body:not(.dark) .focus\:border-\[\#137fec\]:focus {
+  border-color: var(--light-primary) !important;
+}
+
+/* Selection color */
+body:not(.dark) ::selection {
+  background-color: rgba(212, 105, 31, 0.3);
+  color: var(--light-text);
+}
+
+/* Scrollbar styling for light theme */
+body:not(.dark) ::-webkit-scrollbar {
+  width: 12px;
+}
+
+body:not(.dark) ::-webkit-scrollbar-track {
+  background: var(--light-surface);
+}
+
+body:not(.dark) ::-webkit-scrollbar-thumb {
+  background: var(--light-border);
+  border-radius: 6px;
+}
+
+body:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: var(--light-primary);
+}

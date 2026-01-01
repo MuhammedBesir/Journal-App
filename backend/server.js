@@ -1,0 +1,93 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import { initDatabase } from "./config/initDb.js";
+import authRoutes from "./routes/authRoutes.js";
+import journalRoutes from "./routes/journalRoutes.js";
+import todoRoutes from "./routes/todoRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
+import featuresRoutes from "./routes/featuresRoutes.js";
+import exportRoutes from "./routes/exportRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
+import mediaRoutes from "./routes/mediaRoutes.js";
+
+dotenv.config();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+      ];
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static file serving for uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/journal", journalRoutes);
+app.use("/api/todos", todoRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/features", featuresRoutes);
+app.use("/api/export", exportRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/media", mediaRoutes);
+
+// Import buddy routes
+import buddyRoutes from "./routes/buddyRoutes.js";
+app.use("/api/buddies", buddyRoutes);
+
+// Health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Something went wrong!" });
+});
+
+// Initialize database and start server
+const startServer = async () => {
+  try {
+    await initDatabase();
+    // For Vercel, we export the app
+    // Only listen if not running in Vercel (or similar serverless env)
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+      });
+    }
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
