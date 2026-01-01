@@ -73,16 +73,26 @@ import pool from "./config/database.js";
 app.get("/api/db-check", async (req, res) => {
   try {
     const client = await pool.connect();
-    const result = await client.query("SELECT NOW()");
+    const nowResult = await client.query("SELECT NOW()");
+    const tablesResult = await client.query(`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public'
+    `);
     client.release();
-    res.json({ status: "connected", time: result.rows[0].now });
+    
+    res.json({ 
+      status: "connected", 
+      time: nowResult.rows[0].now,
+      tables: tablesResult.rows.map(r => r.table_name),
+      env: process.env.NODE_ENV
+    });
   } catch (error) {
     console.error("DB Check Failed:", error);
     res.status(500).json({ 
       status: "error", 
       message: error.message,
-      // Only show partial connection string for security
-      connectionString: process.env.DATABASE_URL ? "Exists (starts with " + process.env.DATABASE_URL.substring(0, 15) + "...)" : "Missing"
+      connectionString: process.env.DATABASE_URL ? "Exists" : "Missing"
     });
   }
 });
