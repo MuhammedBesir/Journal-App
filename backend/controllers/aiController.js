@@ -161,6 +161,7 @@ Respond ONLY with valid JSON in this exact format:
 // Generate weekly summary using AI
 export const getWeeklySummary = async (req, res) => {
   const userId = req.user.id;
+  const { language = 'en' } = req.query;
 
   if (!process.env.GEMINI_API_KEY) {
     return res.status(500).json({ error: "Gemini API key not configured" });
@@ -177,8 +178,11 @@ export const getWeeklySummary = async (req, res) => {
     );
 
     if (entries.rows.length === 0) {
+      const msg = language === 'tr' 
+        ? "Bu hafta hiç günlük girmedin. Kişiselleştirilmiş içgörüler için yazmaya başla!" 
+        : "No entries this week. Start writing to get personalized insights!";
       return res.json({ 
-        summary: "No entries this week. Start writing to get personalized insights!",
+        summary: msg,
         hasData: false 
       });
     }
@@ -188,6 +192,8 @@ export const getWeeklySummary = async (req, res) => {
     const entriesContext = entries.rows.map(e => 
       `Date: ${e.date}\nMood: ${e.mood || 'not specified'}\nTitle: ${e.title}\nContent: ${e.content.substring(0, 500)}...`
     ).join("\n\n---\n\n");
+
+    const promptLanguage = language === 'tr' ? 'Turkish' : 'English';
 
     const prompt = `You are a compassionate journaling companion. Analyze this week's journal entries and provide a brief, supportive weekly summary.
 
@@ -199,9 +205,19 @@ Write a warm, personalized summary (150-200 words) that:
 2. Notes any positive patterns or growth
 3. Offers gentle encouragement for the coming week
 
-Write in a supportive, personal tone as if you're their thoughtful friend.`;
+Write in a supportive, personal tone as if you're their thoughtful friend.
+IMPORTANT: Write the summary entirely in ${promptLanguage}.`;
 
-    const result = await model.generateContent(prompt);
+    // Set timeout
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("AI generation timed out")), 8000)
+    );
+
+    const result = await Promise.race([
+      model.generateContent(prompt),
+      timeoutPromise
+    ]);
+
     const response = await result.response;
     const summary = response.text();
 
@@ -223,13 +239,17 @@ Write in a supportive, personal tone as if you're their thoughtful friend.`;
     });
   } catch (error) {
     console.error("Gemini AI weekly summary error:", error);
-    res.status(500).json({ error: "Failed to generate summary" });
+    const errorMsg = language === 'tr'
+      ? "Özet oluşturulurken bir hata oluştu veya çok uzun sürdü."
+      : "Failed to generate summary or request timed out.";
+    res.status(500).json({ error: errorMsg });
   }
 };
 
 // Get personalized insights based on journal patterns
 export const getInsights = async (req, res) => {
   const userId = req.user.id;
+  const { language = 'en' } = req.query;
 
   if (!process.env.GEMINI_API_KEY) {
     return res.status(500).json({ error: "Gemini API key not configured" });
@@ -261,6 +281,8 @@ export const getInsights = async (req, res) => {
 
     const model = getGenAI().getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
+    const promptLanguage = language === 'tr' ? 'Turkish' : 'English';
+
     const prompt = `Analyze this journaling data and provide 3 personalized insights.
 
 Mood distribution: ${JSON.stringify(moodStats.rows)}
@@ -276,9 +298,19 @@ Provide exactly 3 actionable insights in JSON format:
   ]
 }
 
-Use appropriate emojis for icons (like 🎯, 💪, 🌟, etc.)`;
+Use appropriate emojis for icons (like 🎯, 💪, 🌟, etc.)
+IMPORTANT: The 'title' and 'text' values MUST be in ${promptLanguage}.`;
 
-    const result = await model.generateContent(prompt);
+    // Set timeout
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("AI generation timed out")), 8000)
+    );
+
+    const result = await Promise.race([
+      model.generateContent(prompt),
+      timeoutPromise
+    ]);
+
     const response = await result.response;
     const text = response.text();
     
@@ -287,22 +319,26 @@ Use appropriate emojis for icons (like 🎯, 💪, 🌟, etc.)`;
       const insights = JSON.parse(jsonMatch[0]);
       res.json(insights);
     } else {
-      res.json({
-        insights: [
-          { icon: "📝", title: "Keep Writing", text: "Consistency is key. Try to write a little each day." },
-          { icon: "🌟", title: "Track Your Mood", text: "Recording your mood helps you understand your emotional patterns." },
-          { icon: "💪", title: "You're Growing", text: "Every entry is a step towards better self-awareness." }
-        ]
-      });
+      throw new Error("Invalid JSON format from AI");
     }
   } catch (error) {
     console.error("Gemini AI insights error:", error);
-    res.json({
-      insights: [
+    
+    const fallbacks = {
+      en: [
         { icon: "📝", title: "Keep Writing", text: "Consistency builds self-awareness over time." },
         { icon: "🌟", title: "Reflect Daily", text: "Even a few sentences can make a difference." },
         { icon: "💪", title: "You're Doing Great", text: "Every entry helps you grow." }
+      ],
+      tr: [
+        { icon: "📝", title: "Yazmaya Devam Et", text: "Tutarlılık zamanla farkındalık oluşturur." },
+        { icon: "🌟", title: "Günlük Yansıma", text: "Birkaç cümle bile fark yaratabilir." },
+        { icon: "💪", title: "Harika Gidiyorsun", text: "Her günlük girişi seni geliştirir." }
       ]
+    };
+
+    res.json({
+      insights: fallbacks[language === 'tr' ? 'tr' : 'en']
     });
   }
 };
