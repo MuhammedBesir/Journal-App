@@ -51,7 +51,7 @@ export const getEntries = async (req, res) => {
   } = req.query;
 
   try {
-    let query = "SELECT * FROM journal_entries WHERE user_id = $1";
+    let query = "SELECT id, user_id, title, LEFT(content, 300) as content, date, mood, tags, is_encrypted, word_count, created_at FROM journal_entries WHERE user_id = $1";
     const params = [userId];
     let paramCount = 1;
 
