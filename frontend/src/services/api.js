@@ -96,10 +96,10 @@ export const exportService = {
 
 // AI services (Gemini)
 export const aiService = {
-  analyzeMood: (content, title) => api.post("/ai/analyze-mood", { content, title }),
-  getSuggestions: () => api.get("/ai/suggestions"),
-  getWeeklySummary: () => api.get("/ai/weekly-summary"),
-  getInsights: () => api.get("/ai/insights"),
+  analyzeMood: (data) => api.post("/ai/analyze-mood", data),
+  getSuggestions: (language = 'en') => api.get(`/ai/suggestions?language=${language}`),
+  getWeeklySummary: (language = 'en') => api.get(`/ai/weekly-summary?language=${language}`),
+  getInsights: (language = 'en') => api.get(`/ai/insights?language=${language}`),
 };
 
 // Media services

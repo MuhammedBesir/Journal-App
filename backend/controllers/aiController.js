@@ -68,6 +68,7 @@ Your response must be exactly one word from the list above.`;
 // Get writing suggestions based on user's writing patterns
 export const getWritingSuggestions = async (req, res) => {
   const userId = req.user.id;
+  const { language = 'en' } = req.query; // Get language from query
 
   if (!process.env.GEMINI_API_KEY) {
     return res.status(500).json({ error: "Gemini API key not configured" });
@@ -92,6 +93,9 @@ export const getWritingSuggestions = async (req, res) => {
       ).join("\n");
     }
 
+    const promptLanguage = language === 'tr' ? 'Turkish' : 'English';
+    const dbLanguage = language === 'tr' ? 'tr' : 'en';
+
     const prompt = `You are a thoughtful journaling assistant. Based on this user's recent journal activity, suggest 3 writing prompts for today.
 
 ${context ? `Recent entries:\n${context}` : "The user is new to journaling."}
@@ -99,6 +103,7 @@ ${context ? `Recent entries:\n${context}` : "The user is new to journaling."}
 Today's date: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 
 Provide exactly 3 short, thoughtful writing prompts in JSON format. Each prompt should be different in style (reflective, gratitude, growth-focused).
+IMPORTANT: The 'title' 'prompt' and 'type' values MUST be in ${promptLanguage}.
 
 Respond ONLY with valid JSON in this exact format:
 {
@@ -109,7 +114,16 @@ Respond ONLY with valid JSON in this exact format:
   ]
 }`;
 
-    const result = await model.generateContent(prompt);
+    // Set timeout for AI generation to prevent 504s
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("AI generation timed out")), 8000)
+    );
+
+    const result = await Promise.race([
+      model.generateContent(prompt),
+      timeoutPromise
+    ]);
+
     const response = await result.response;
     const text = response.text();
     
@@ -119,24 +133,27 @@ Respond ONLY with valid JSON in this exact format:
       const suggestions = JSON.parse(jsonMatch[0]);
       res.json(suggestions);
     } else {
-      // Fallback suggestions
-      res.json({
-        prompts: [
-          { title: "Daily Reflection", prompt: "What moment today brought you the most peace?", type: "reflection" },
-          { title: "Gratitude", prompt: "Name three small things you're grateful for right now.", type: "gratitude" },
-          { title: "Growth", prompt: "What's one thing you learned about yourself this week?", type: "growth" }
-        ]
-      });
+      throw new Error("Invalid JSON format from AI");
     }
   } catch (error) {
     console.error("Gemini AI suggestions error:", error);
-    // Return fallback suggestions
-    res.json({
-      prompts: [
-        { title: "Daily Reflection", prompt: "What made today unique or memorable?", type: "reflection" },
-        { title: "Gratitude", prompt: "What are you thankful for today?", type: "gratitude" },
-        { title: "Growth", prompt: "What challenge helped you grow recently?", type: "growth" }
+    
+    // Fallback suggestions based on language
+    const fallbacks = {
+      en: [
+        { title: "Daily Reflection", prompt: "What moment today brought you the most peace?", type: "reflection" },
+        { title: "Gratitude", prompt: "Name three small things you're grateful for right now.", type: "gratitude" },
+        { title: "Growth", prompt: "What's one thing you learned about yourself this week?", type: "growth" }
+      ],
+      tr: [
+        { title: "Günlük Yansıma", prompt: "Bugün sana en çok huzur veren an hangisiydi?", type: "reflection" },
+        { title: "Şükran", prompt: "Şu an minnettar olduğun üç küçük şeyi yaz.", type: "gratitude" },
+        { title: "Gelişim", prompt: "Bu hafta kendin hakkında öğrendiğin bir şey nedir?", type: "growth" }
       ]
+    };
+
+    res.json({
+      prompts: fallbacks[req.query.language === 'tr' ? 'tr' : 'en']
     });
   }
 };

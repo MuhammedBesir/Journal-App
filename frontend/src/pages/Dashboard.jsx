@@ -67,7 +67,7 @@ const Dashboard = () => {
   const fetchAiSuggestions = async () => {
     try {
       setLoadingSuggestions(true);
-      const response = await aiService.getSuggestions();
+      const response = await aiService.getSuggestions(language);
       setAiSuggestions(response.data.prompts || []);
     } catch (error) {
       console.error("Error fetching AI suggestions:", error);
@@ -172,22 +172,22 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-[#111418]">
-        <div className="text-center">
-          <span className="material-symbols-outlined text-5xl text-[#137fec] animate-spin">
-            progress_activity
-          </span>
-          <p className="mt-4 text-[#9dabb9]">
-            {language === "tr"
-              ? "Günlüğün yükleniyor..."
-              : "Loading your journal..."}
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex-1 flex items-center justify-center bg-[#111418]">
+  //       <div className="text-center">
+  //         <span className="material-symbols-outlined text-5xl text-[#137fec] animate-spin">
+  //           progress_activity
+  //         </span>
+  //         <p className="mt-4 text-[#9dabb9]">
+  //           {language === "tr"
+  //             ? "Günlüğün yükleniyor..."
+  //             : "Loading your journal..."}
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex-1 overflow-y-auto p-4 lg:p-10 bg-[#111418]">
@@ -545,7 +545,16 @@ const Dashboard = () => {
 
             {/* Scrollable Container */}
             <div className="overflow-y-auto flex-1 pr-2 pb-10 space-y-4">
-              {filteredEntries.length === 0 ? (
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <span className="material-symbols-outlined text-4xl text-[#137fec] animate-spin mb-4">
+                    progress_activity
+                  </span>
+                  <p className="text-[#9dabb9] text-sm">
+                    {language === "tr" ? "Son kayıtlar getiriliyor..." : "Fetching recent entries..."}
+                  </p>
+                </div>
+              ) : filteredEntries.length === 0 ? (
                 <div className="p-12 rounded-2xl border-2 border-dashed border-[#283039] flex flex-col items-center justify-center text-center">
                   <div className="w-16 h-16 bg-[#1c2127] rounded-full flex items-center justify-center mb-4 text-[#9dabb9]">
                     <span className="material-symbols-outlined text-3xl">
