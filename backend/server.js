@@ -30,7 +30,9 @@ app.use(
         "http://localhost:5173",
         "http://localhost:5174",
         "http://localhost:3000",
-      ];
+        "https://journal-app-two-xi.vercel.app",
+        process.env.FRONTEND_URL,
+      ].filter(Boolean);
 
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
@@ -91,3 +93,6 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Export for Vercel serverless
+export default app;

@@ -9,3 +9,5 @@ temp_env.txt
 .env.production
 .vercel/
 *.log
+.vercel
+.env*.local
