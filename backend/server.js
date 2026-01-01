@@ -97,6 +97,38 @@ app.get("/api/db-check", async (req, res) => {
   }
 });
 
+// Advanced Debug: Test Query on 'users'
+app.get("/api/debug-users", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT id, email FROM users LIMIT 5");
+    res.json({ 
+      status: "success", 
+      count: result.rows.length,
+      users: result.rows 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: "error", 
+      message: error.message,
+      stack: error.stack 
+    });
+  }
+});
+
+// Advanced Debug: Test Token Decoding (Mock)
+import jwt from "jsonwebtoken";
+app.get("/api/debug-token", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) return res.json({ status: "no-token" });
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ status: "valid", decoded });
+  } catch (err) {
+    res.json({ status: "invalid", error: err.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
