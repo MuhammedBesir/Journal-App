@@ -228,11 +228,18 @@ const NewEntry = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Error creating entry:", error);
-      alert(
-        language === "tr"
-          ? "Günlük kaydedilemedi. Lütfen tekrar deneyin."
-          : "Failed to save entry. Please try again."
-      );
+      
+      let errorMessage = language === "tr"
+        ? "Günlük kaydedilemedi. Lütfen tekrar deneyin."
+        : "Failed to save entry. Please try again.";
+
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.errors) {
+        errorMessage = error.response.data.errors.map(e => e.msg).join(", ");
+      }
+
+      alert(errorMessage);
     } finally {
       setIsSaving(false);
     }
