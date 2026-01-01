@@ -42,9 +42,16 @@ const Register = () => {
       await register(formData.name, formData.email, formData.password);
       navigate("/");
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Registration failed. Please try again."
-      );
+      console.error("Registration error:", err);
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.response?.data?.errors) {
+        errorMessage = err.response.data.errors.map(e => e.msg).join(", ");
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
