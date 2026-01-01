@@ -1,6 +1,6 @@
 {
-  "installCommand": "npm install && cd frontend && npm install && cd ../backend && npm install",
-  "buildCommand": "cd frontend && npm run build",
+  "installCommand": "cd frontend && npm install && cd ../backend && npm install",
+  "buildCommand": "cd frontend && npx --yes vite@5 build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index.js" },
