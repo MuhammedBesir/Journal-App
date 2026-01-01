@@ -143,10 +143,13 @@ app.use((err, req, res, next) => {
 // Initialize database and start server
 const startServer = async () => {
   try {
-    await initDatabase();
-    // For Vercel, we export the app
+    // Disable auto-init in production to prevent locking/latency
+    // await initDatabase(); 
+    
     // Only listen if not running in Vercel (or similar serverless env)
     if (process.env.NODE_ENV !== 'production') {
+      await initDatabase(); // Keep for local dev
+      
       app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
         console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
