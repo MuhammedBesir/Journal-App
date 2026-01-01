@@ -68,6 +68,25 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running" });
 });
 
+// Debug DB - Temporary
+import pool from "./config/database.js";
+app.get("/api/db-check", async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query("SELECT NOW()");
+    client.release();
+    res.json({ status: "connected", time: result.rows[0].now });
+  } catch (error) {
+    console.error("DB Check Failed:", error);
+    res.status(500).json({ 
+      status: "error", 
+      message: error.message,
+      // Only show partial connection string for security
+      connectionString: process.env.DATABASE_URL ? "Exists (starts with " + process.env.DATABASE_URL.substring(0, 15) + "...)" : "Missing"
+    });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
