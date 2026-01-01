@@ -79,12 +79,21 @@ app.get("/api/db-check", async (req, res) => {
       FROM information_schema.tables 
       WHERE table_schema = 'public'
     `);
+    
+    // Check indexes
+    const indexesResult = await client.query(`
+      SELECT tablename, indexname 
+      FROM pg_indexes 
+      WHERE schemaname = 'public'
+    `);
+
     client.release();
     
     res.json({ 
       status: "connected", 
       time: nowResult.rows[0].now,
       tables: tablesResult.rows.map(r => r.table_name),
+      indexes: indexesResult.rows.map(r => `${r.tablename}:${r.indexname}`),
       env: process.env.NODE_ENV
     });
   } catch (error) {
