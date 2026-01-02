@@ -190,7 +190,7 @@ const Dashboard = () => {
   // }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-10 bg-[#111418]">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-[#111418] pt-16 lg:pt-4">
       <div className="max-w-7xl mx-auto">
         {/* Page Title */}
         <div className="mb-6">
@@ -263,7 +263,7 @@ const Dashboard = () => {
               <span className="material-symbols-outlined text-purple-400 text-sm animate-spin">progress_activity</span>
             )}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {aiSuggestions.map((suggestion, index) => {
               const gradients = [
                 "from-purple-500/20 to-pink-500/20 border-purple-500/30 hover:border-purple-400/50",
@@ -275,7 +275,7 @@ const Dashboard = () => {
                 <button
                   key={index}
                   onClick={() => navigate("/new-entry", { state: { prompt: suggestion.prompt } })}
-                  className={`text-left p-4 rounded-xl bg-gradient-to-br ${gradients[index % 3]} border transition-all hover:scale-[1.02]`}
+                  className={`text-left p-4 rounded-xl bg-gradient-to-br ${gradients[index % 3]} border transition-all hover:scale-[1.02] touch-manipulation`}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span className="material-symbols-outlined text-white/70 text-lg">{icons[index % 3]}</span>
@@ -312,11 +312,11 @@ const Dashboard = () => {
           {/* Left Column: Calendar Widget */}
           <section className="lg:w-[380px] shrink-0 flex flex-col gap-6">
             {/* Calendar Card */}
-            <div className="bg-[#1c2127] rounded-2xl p-5 shadow-sm border border-[#283039]">
+            <div className="bg-[#1c2127] rounded-2xl p-4 sm:p-5 shadow-sm border border-[#283039]">
               <div className="flex items-center justify-between mb-4 px-2">
                 <button
                   onClick={previousMonth}
-                  className="p-1 hover:bg-[#283039] rounded-full transition-colors text-[#9dabb9]"
+                  className="p-2 hover:bg-[#283039] rounded-full transition-colors text-[#9dabb9] touch-manipulation"
                 >
                   <span
                     className="material-symbols-outlined"
@@ -330,7 +330,7 @@ const Dashboard = () => {
                 </h2>
                 <button
                   onClick={nextMonth}
-                  className="p-1 hover:bg-[#283039] rounded-full transition-colors text-[#9dabb9]"
+                  className="p-2 hover:bg-[#283039] rounded-full transition-colors text-[#9dabb9] touch-manipulation">
                 >
                   <span
                     className="material-symbols-outlined"
@@ -376,7 +376,7 @@ const Dashboard = () => {
                         }
                       }
                     }}
-                    className={`aspect-square flex flex-col items-center justify-center rounded-full text-sm relative group ${
+                    className={`aspect-square flex flex-col items-center justify-center rounded-full text-sm relative group min-h-[44px] touch-manipulation ${
                       isToday(date)
                         ? "text-white bg-[#137fec] shadow-lg shadow-[#137fec]/30 font-bold"
                         : "text-white hover:bg-[#283039]"
@@ -393,7 +393,7 @@ const Dashboard = () => {
 
             {/* Entry Detail Sidebar */}
             {selectedDate && (
-              <div className="bg-[#1c2127] rounded-2xl p-5 shadow-sm border border-[#283039]">
+              <div className="bg-[#1c2127] rounded-2xl p-4 sm:p-5 shadow-sm border border-[#283039]">
                 {selectedEntry ? (
                   <div>
                     <div className="flex items-start justify-between mb-3">
@@ -438,7 +438,7 @@ const Dashboard = () => {
                     )}
                     <button
                       onClick={() => navigate(`/entry/${selectedEntry.id}`)}
-                      className="w-full bg-[#137fec] hover:bg-[#0f6acc] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      className="w-full bg-[#137fec] hover:bg-[#0f6acc] text-white px-4 py-3 rounded-lg text-sm font-medium transition-colors touch-manipulation">
                     >
                       {language === "tr"
                         ? "Tam Günlüğü Görüntüle"
@@ -460,7 +460,7 @@ const Dashboard = () => {
                       onClick={() =>
                         navigate(`/new-entry?date=${selectedDate}`)
                       }
-                      className="w-full bg-[#137fec] hover:bg-[#0f6acc] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      className="w-full bg-[#137fec] hover:bg-[#0f6acc] text-white px-4 py-3 rounded-lg text-sm font-medium transition-colors touch-manipulation">
                     >
                       {language === "tr" ? "Günlük Oluştur" : "Create Entry"}
                     </button>
@@ -517,7 +517,7 @@ const Dashboard = () => {
                     e.stopPropagation();
                     // Filter işlevi eklenebilir
                   }}
-                  className="p-2 text-[#9dabb9] hover:text-[#137fec] transition-colors bg-[#1c2127] rounded-lg border border-[#283039] shadow-sm"
+                  className="p-2.5 text-[#9dabb9] hover:text-[#137fec] transition-colors bg-[#1c2127] rounded-lg border border-[#283039] shadow-sm touch-manipulation">
                 >
                   <span
                     className="material-symbols-outlined"
@@ -531,7 +531,7 @@ const Dashboard = () => {
                     e.stopPropagation();
                     // Sort işlevi eklenebilir
                   }}
-                  className="p-2 text-[#9dabb9] hover:text-[#137fec] transition-colors bg-[#1c2127] rounded-lg border border-[#283039] shadow-sm"
+                  className="p-2.5 text-[#9dabb9] hover:text-[#137fec] transition-colors bg-[#1c2127] rounded-lg border border-[#283039] shadow-sm touch-manipulation">
                 >
                   <span
                     className="material-symbols-outlined"
@@ -584,7 +584,7 @@ const Dashboard = () => {
                     <div
                       key={entry.id}
                       onClick={() => navigate(`/entry/${entry.id}`)}
-                      className={`group relative bg-[#1c2127] p-5 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer ${
+                      className={`group relative bg-[#1c2127] p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer touch-manipulation ${
                         index === 0
                           ? "border-l-4 border-l-[#137fec]"
                           : "border border-[#283039] hover:border-[#137fec]/50"

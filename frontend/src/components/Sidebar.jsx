@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { user } = useAuth();
   const { language } = useLanguage();
@@ -11,8 +11,21 @@ const Sidebar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  const handleLinkClick = () => {
+    if (onClose) onClose();
+  };
+
   return (
-    <aside className={`hidden lg:flex w-[280px] flex-col border-r ${darkMode ? 'border-[#283039] bg-[#111418]' : 'border-[#e8dcc8] bg-[#fffbf0]'} h-full flex-shrink-0`}>
+    <aside className={`
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      lg:translate-x-0
+      fixed lg:static
+      w-[280px] flex-col border-r 
+      ${darkMode ? 'border-[#283039] bg-[#111418]' : 'border-[#e8dcc8] bg-[#fffbf0]'} 
+      h-full flex-shrink-0 z-40
+      transition-transform duration-300 ease-in-out
+      flex
+    `}>
       <div className="p-4 flex flex-col gap-4 h-full">
         <div className="flex flex-col px-2">
           <h1 className={`${darkMode ? 'text-white' : 'text-[#1a1a1a]'} text-xl font-bold leading-normal tracking-tight`}>
@@ -25,7 +38,8 @@ const Sidebar = () => {
         <nav className="flex flex-col gap-2 mt-4 flex-1">
           <Link
             to="/"
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer ${
+            onClick={handleLinkClick}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer touch-manipulation ${
               isActive("/")
                 ? darkMode ? "bg-[#283039] text-white" : "bg-[#f5ebe0] text-[#1a1a1a]"
                 : darkMode ? "text-[#9dabb9] hover:bg-[#283039] hover:text-white" : "text-[#8b7355] hover:bg-[#f5ebe0] hover:text-[#1a1a1a]"
@@ -40,7 +54,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/new-entry"
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer ${
+            onClick={handleLinkClick}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer touch-manipulation ${
               isActive("/new-entry")
                 ? darkMode ? "bg-[#283039] text-white" : "bg-[#f5ebe0] text-[#1a1a1a]"
                 : darkMode ? "text-[#9dabb9] hover:bg-[#283039] hover:text-white" : "text-[#8b7355] hover:bg-[#f5ebe0] hover:text-[#1a1a1a]"
@@ -55,7 +70,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/calendar"
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer ${
+            onClick={handleLinkClick}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer touch-manipulation ${
               isActive("/calendar")
                 ? darkMode ? "bg-[#283039] text-white" : "bg-[#f5ebe0] text-[#1a1a1a]"
                 : darkMode ? "text-[#9dabb9] hover:bg-[#283039] hover:text-white" : "text-[#8b7355] hover:bg-[#f5ebe0] hover:text-[#1a1a1a]"
@@ -70,7 +86,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/analytics"
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer ${
+            onClick={handleLinkClick}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer touch-manipulation ${
               isActive("/analytics")
                 ? darkMode ? "bg-[#283039] text-white" : "bg-[#f5ebe0] text-[#1a1a1a]"
                 : darkMode ? "text-[#9dabb9] hover:bg-[#283039] hover:text-white" : "text-[#8b7355] hover:bg-[#f5ebe0] hover:text-[#1a1a1a]"
@@ -85,7 +102,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/settings"
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer ${
+            onClick={handleLinkClick}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors cursor-pointer touch-manipulation ${
               isActive("/settings")
                 ? darkMode ? "bg-[#283039] text-white" : "bg-[#f5ebe0] text-[#1a1a1a]"
                 : darkMode ? "text-[#9dabb9] hover:bg-[#283039] hover:text-white" : "text-[#8b7355] hover:bg-[#f5ebe0] hover:text-[#1a1a1a]"

@@ -134,7 +134,7 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-8 bg-[#111418]">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#111418] pt-16 lg:pt-4">
       <div className="max-w-7xl mx-auto">
         {/* Header with Quote */}
         <div className="mb-8">
@@ -159,12 +159,12 @@ const Analytics = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap transition-all touch-manipulation ${
                 activeTab === tab.id
                   ? "bg-[#137fec] text-white shadow-lg shadow-[#137fec]/20"
                   : "bg-[#1c2127] text-[#9dabb9] hover:bg-[#283039] hover:text-white"
@@ -178,7 +178,7 @@ const Analytics = () => {
 
         {/* Date Filter */}
         <div className="bg-[#1c2127]/50 backdrop-blur-xl rounded-xl border border-[#283039] p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-[#9dabb9] text-sm font-medium mb-2">
                 {language === "tr" ? "Başlangıç Tarihi" : "Start Date"}

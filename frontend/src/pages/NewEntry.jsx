@@ -246,16 +246,16 @@ const NewEntry = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-10 bg-[#111418] flex justify-center">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-[#111418] flex justify-center pt-16 lg:pt-4">
       <div className="w-full max-w-[960px] flex flex-col pb-20">
         {/* Page Title */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+              <h1 className="text-white text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
                 {language === "tr" ? "Yeni Günlük Oluştur" : "Create New Entry"}
               </h1>
-              <p className="text-[#9dabb9] text-base mt-2">
+              <p className="text-[#9dabb9] text-sm sm:text-base mt-2">
                 {language === "tr"
                   ? "Bugünün düşüncelerini, hislerini ve anılarını kaydet."
                   : "Capture your thoughts, feelings, and memories for today."}
@@ -304,7 +304,7 @@ const NewEntry = () => {
                   ? "Nasıl hissediyorsun?"
                   : "How are you feeling?"}
               </label>
-              <div className="flex gap-2 sm:gap-4 overflow-x-auto pb-2">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {[
                   { mood: "Happy", icon: "sentiment_satisfied" },
                   { mood: "Neutral", icon: "sentiment_neutral" },
@@ -312,7 +312,7 @@ const NewEntry = () => {
                   { mood: "Energetic", icon: "bolt" },
                   { mood: "Calm", icon: "spa" },
                 ].map(({ mood, icon }) => (
-                  <label key={mood} className="cursor-pointer">
+                  <label key={mood} className="cursor-pointer touch-manipulation">
                     <input
                       className="peer sr-only"
                       type="radio"
